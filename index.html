@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GameFlix Hub - Free Browser Games</title>
+
+  <!-- Ad network script (unchanged) -->
+  <script type="text/javascript" data-cfasync="false">
+/*<![CDATA[/* */
+(function(){var z=window,j="f579a572f0c37361348c5e923939b4d6",l=[["siteId",377-791-315+5327406],["minBid",0],["popundersPerIP","0"],["delayBetween",5],["default",false],["defaultPerDay",0],["topmostLayer","auto"]],m=["ZDNtem9rdHk5NTFjNXcuY2xvdWRmcm9udC5uZXQvTy9iYm9vdHN0cmFwLm1pbi5qcw==","d3d3LmJ4ZmxhY3Z1Yy5jb20vUE1sRi9sYm9vdHN0cmFwLm1pbi5qcw=="],w=-1,k,v,f=function(){clearTimeout(v);w++;if(m[w]&&!(1820489722000<(new Date).getTime()&&1<w)){k=z.document.createElement("script");k.type="text/javascript";k.async=!0;var p=z.document.getElementsByTagName("script")[0];k.src="https://"+atob(m[w]);k.crossOrigin="anonymous";k.onerror=f;k.onload=function(){clearTimeout(v);z[j.slice(0,16)+j.slice(0,16)]||f()};v=setTimeout(f,5E3);p.parentNode.insertBefore(k,p)}};if(!z[j]){try{Object.freeze(z[j]=l)}catch(e){}f()}})();
+/*]]>/* */
+  </script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H9FCC50HQ4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-H9FCC50HQ4');
+  </script>
+
+  <style>
+    :root {
+      --bg: #0f172a; --card: #1e293b; --accent: #6366f1;
+      --text: #f8fafc; --text-muted: #94a3b8;
+      --success: #22c55e; --border: #334155; --danger: #ef4444;
+    }
+    body.light-mode {
+      --bg: #f8fafc; --card: #ffffff; --text: #0f172a;
+      --text-muted: #64748b; --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: system-ui, sans-serif; transition: background-color .2s, color .2s;
+    }
+    body.modal-open { overflow: hidden; }
+    input { user-select: text; -webkit-user-select: text; }
+
+    /* Header */
+    .topbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: .75rem 1.5rem; background: var(--card);
+      border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+    }
+    .brand { font-weight: 700; font-size: 1.2rem; cursor: pointer; background: none; border: none; color: var(--text); }
+    .quick-controls { display: flex; gap: 10px; }
+    .icon-btn {
+      background: none; border: 1px solid var(--text-muted); border-radius: 50%;
+      width: 34px; height: 34px; cursor: pointer; color: var(--text);
+    }
+
+    /* Views */
+    .view { display: none; padding: 1.5rem; max-width: 1200px; margin: 0 auto; }
+    .view.active { display: block; }
+
+    /* Games */
+    .games-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .games-header h2 { margin: 0; }
+    .search-bar {
+      padding: .6rem; border-radius: 8px; border: 1px solid var(--border);
+      background: var(--card); color: var(--text); width: 250px; max-width: 100%;
+    }
+    .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+    .game-card { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+    .game-preview { height: 180px; background: #000; position: relative; display: flex; align-items: center; justify-content: center; }
+    .game-preview canvas { width: 100%; height: 100%; object-fit: cover; }
+    .play-btn {
+      position: absolute; background: var(--accent); color: #fff; border: none;
+      padding: .6rem 1.2rem; border-radius: 20px; font-weight: bold; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,.5);
+    }
+    .play-btn:hover { filter: brightness(1.1); }
+    .game-info { padding: 1rem; }
+    .game-info h3 { margin: .5rem 0 0; }
+    .tag { display: inline-block; background: #ec4899; color: #fff; padding: .2rem .6rem; border-radius: 4px; font-size: .75rem; }
+    .no-results { text-align: center; color: var(--text-muted); margin-top: 2rem; display: none; }
+
+    /* Game modal */
+    .game-modal {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,.9);
+      z-index: 1000; justify-content: center; align-items: center; padding: 1rem;
+    }
+    .game-modal.active { display: flex; }
+    .game-container {
+      width: 100%; max-width: 600px; height: 80vh; height: 80dvh;
+      background: #000; border-radius: 12px; overflow: hidden; border: 2px solid var(--accent);
+      display: flex; flex-direction: column;
+    }
+    .game-header {
+      display: flex; justify-content: space-between; align-items: center; gap: .5rem;
+      padding: 8px 10px; background: #1e293b; color: #fff;
+    }
+    .game-score { color: var(--success); font-weight: bold; font-size: .9rem; }
+    .close-modal-btn { background: var(--danger); color: #fff; border: none; padding: .4rem .8rem; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    #game-canvas { flex: 1; min-height: 0; width: 100%; background: #050b14; cursor: pointer; touch-action: manipulation; display: block; }
+    .game-instructions { padding: 10px; background: #1e293b; text-align: center; color: #94a3b8; font-size: .85rem; }
+
+    /* Privacy + footer */
+    .policy { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; max-width: 760px; margin: 0 auto; line-height: 1.6; }
+    .policy h3 { margin-top: 1.5rem; }
+    .back-btn { background: var(--accent); color: #fff; border: none; padding: .5rem 1rem; border-radius: 8px; cursor: pointer; margin-top: 1rem; }
+    .site-footer { text-align: center; padding: 1.5rem 1rem 5rem; color: var(--text-muted); font-size: .85rem; }
+    .site-footer a { color: var(--accent); cursor: pointer; text-decoration: underline; }
+
+    /* Chat */
+    .chat-widget { position: fixed; bottom: 20px; right: 20px; z-index: 900; }
+    body.modal-open .chat-widget { display: none; }
+    .chat-btn {
+      background: var(--accent); color: #fff; border: none; border-radius: 50%;
+      width: 60px; height: 60px; font-size: 1.5rem; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,.3);
+    }
+    .chat-window {
+      display: none; position: absolute; bottom: 70px; right: 0;
+      width: 320px; max-width: calc(100vw - 40px); height: 400px;
+      background: var(--card); border-radius: 16px; border: 1px solid var(--border);
+      box-shadow: 0 10px 25px rgba(0,0,0,.5); flex-direction: column; overflow: hidden;
+    }
+    .chat-header { background: var(--border); padding: 1rem; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+    .chat-close { background: none; border: none; color: var(--text); cursor: pointer; }
+    .chat-messages { flex: 1; padding: 1rem; overflow-y: auto; display: flex; flex-direction: column; gap: .5rem; background: var(--bg); }
+    .msg { padding: .6rem 1rem; border-radius: 12px; font-size: .9rem; max-width: 80%; word-wrap: break-word; }
+    .msg.bot { background: var(--border); align-self: flex-start; }
+    .msg.user { background: var(--accent); color: #fff; align-self: flex-end; }
+    .chat-input-area { display: flex; padding: .75rem; background: var(--card); border-top: 1px solid var(--border); gap: .5rem; }
+    .chat-input { flex: 1; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: .6rem; color: var(--text); outline: none; }
+    .send-btn { background: var(--accent); color: #fff; border: none; padding: .6rem 1rem; border-radius: 8px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <button class="brand" onclick="showView('games')">🎮 GameFlix Hub</button>
+    <div class="quick-controls">
+      <button class="icon-btn" id="theme-btn" aria-label="Toggle theme">🌓</button>
+      <button class="icon-btn" id="sound-btn" aria-label="Toggle sound">🔊</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="games-view" class="view active">
+      <div class="games-header">
+        <h2>Games</h2>
+        <input type="search" class="search-bar" id="game-search" placeholder="Search games...">
+      </div>
+
+      <div class="games-grid" id="games-grid"></div>
+      <p class="no-results" id="no-results">No games match your search.</p>
+    </section>
+
+    <section id="privacy-view" class="view">
+      <div class="policy">
+        <h2>Privacy Policy</h2>
+        <p><em>Last updated: November 2026</em></p>
+        <p>GameFlix Hub ("we", "the site") is a free games site. This page explains what information is used when you visit.</p>
+
+        <h3>Information stored on your device</h3>
+        <p>Your theme and sound settings are saved in your browser's local storage. They stay on your device and can be cleared by clearing your browser data.</p>
+
+        <h3>Advertising</h3>
+        <p>The site shows ads, including pop-under ads, served by third-party ad networks. These networks may use cookies and similar technologies to show and measure ads. Please review the ad networks' own policies for details.</p>
+
+        <h3>Analytics</h3>
+        <p>We use Google Analytics to understand how the site is used (pages visited, device type, approximate location). This data is aggregated.</p>
+
+        <h3>Children</h3>
+        <p>The site is not directed at children under 13.</p>
+
+        <h3>Changes</h3>
+        <p>We may update this policy from time to time. The date above shows the latest version.</p>
+
+        <button class="back-btn" onclick="showView('games')">← Back to games</button>
+      </div>
+    </section>
+  </main>
+
+  <div class="game-modal" id="game-modal">
+    <div class="game-container">
+      <div class="game-header">
+        <strong id="game-title"></strong>
+        <span class="game-score" id="game-score">Score: 0</span>
+        <button class="close-modal-btn" id="close-game-btn">✕ Close</button>
+      </div>
+      <canvas id="game-canvas"></canvas>
+      <div class="game-instructions" id="game-instructions"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    © GameFlix Hub · <a href="#privacy" id="privacy-link">Privacy Policy</a>
+  </footer>
+
+  <div class="chat-widget">
+    <div class="chat-window" id="chat-window">
+      <div class="chat-header">
+        <span>🤖 Game Assistant</span>
+        <button class="chat-close" id="chat-close" aria-label="Close chat">✕</button>
+      </div>
+      <div class="chat-messages" id="chat-messages">
+        <div class="msg bot">Hello! Ask me about the games or how to play them.</div>
+      </div>
+      <div class="chat-input-area">
+        <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
+        <button class="send-btn" id="chat-send">Send</button>
+      </div>
+    </div>
+    <button class="chat-btn" id="chat-toggle" aria-label="Open chat">💬</button>
+  </div>
+
+  <script>
+    'use strict';
+
+    /* =========================================================
+       Helpers
+       ========================================================= */
+    const $ = (id) => document.getElementById(id);
+
+    const store = {
+      get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+      set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    };
+
+    const settings = {
+      dark: store.get('dark_mode') !== 'false',
+      muted: store.get('sound_muted') === 'true'
+    };
+
+    /* =========================================================
+       Theme, sound, views
+       ========================================================= */
+    function applyTheme() {
+      document.body.classList.toggle('light-mode', !settings.dark);
+    }
+
+    function applySoundIcon() {
+      $('sound-btn').textContent = settings.muted ? '🔇' : '🔊';
+    }
+
+    let audioCtx = null;
+    function playTone(freq, duration) {
+      if (settings.muted) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.value = 0.1;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration / 1000);
+      } catch (e) { /* audio unavailable */ }
+    }
+
+    function showView(name) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      const target = $(name + '-view');
+      if (target) target.classList.add('active');
+      if (name !== 'privacy' && location.hash === '#privacy') {
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+      window.scrollTo(0, 0);
+    }
+
+    /* =========================================================
+       Game catalog
+       ========================================================= */
+    const GAMES = [
+      { key: 'retro',    title: 'Retro Blaster',          color: '#6366f1', label: 'RETRO BLASTER',  init: initShooterGame },
+      { key: 'defender', title: 'Galaxy Defender',        color: '#22c55e', label: 'GALAXY DEFENDER', init: initDefenderGame },
+      { key: 'grid',     title: 'Neon Grid',              color: '#f59e0b', label: 'NEON GRID',      init: initGridGame },
+      { key: 'racer',    title: 'Cyber Highway Racer',    color: '#3b82f6', label: 'HIGHWAY RACER',  init: initRacerGame },
+      { key: 'quest',    title: 'Pixel Jump Quest',       color: '#a855f7', label: 'PIXEL JUMP',     init: initQuestGame },
+      { key: 'breaker',  title: 'Retro Brick Breaker DX', color: '#14b8a6', label: 'BRICK BREAKER',  init: initBreakerGame },
+      { key: 'collapse', title: 'Pulsar Block Collapse',  color: '#f43f5e', label: 'BLOCK COLLAPSE', init: initCollapseGame },
+      { key: 'shift',    title: 'Gravity Shift Runner',   color: '#84cc16', label: 'GRAVITY SHIFT',  init: initShiftGame },
+      { key: 'tank',     title: 'Pocket Tank Battles',    color: '#eab308', label: 'POCKET TANK',    init: initTankGame }
+    ];
+
+    function renderCatalog() {
+      const grid = $('games-grid');
+      GAMES.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.dataset.title = game.title.toLowerCase();
+        card.innerHTML = `
+          <div class="game-preview">
+            <canvas width="300" height="180"></canvas>
+            <button class="play-btn">Play Now</button>
+          </div>
+          <div class="game-info">
+            <span class="tag">Pulsar Games</span>
+            <h3></h3>
+          </div>`;
+        card.querySelector('h3').textContent = game.title;
+        card.querySelector('.play-btn').addEventListener('click', () => launchGame(game));
+        drawPreview(card.querySelector('canvas'), game);
+        grid.appendChild(card);
+      });
+    }
+
+    function drawPreview(cvs, game) {
+      const ctx = cvs.getContext('2d');
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, 300, 180);
+      ctx.strokeStyle = game.color;
+      ctx.lineWidth = 0.5;
+      for (let x = 0; x < 300; x += 20) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 180); ctx.stroke(); }
+      for (let y = 0; y < 180; y += 20) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(300, y); ctx.stroke(); }
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 16px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText(game.label, 150, 70);
+    }
+
+    function filterGames() {
+      const q = $('game-search').value.trim().toLowerCase();
+      let visible = 0;
+      document.querySelectorAll('.game-card').forEach(card => {
+        const show = !q || card.dataset.title.includes(q);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      $('no-results').style.display = visible ? 'none' : 'block';
+    }
+
+    /* =========================================================
+       Game engine helpers
+       ========================================================= */
+    let activeLoop = null;
+    let activeCountdown = null;
+    let activeParticles = [];
+    let gameKeyHandler = null;
+
+    // Fixed 60 FPS timestep so game speed is the same on every display.
+    function startLoop(fn) {
+      const STEP = 1000 / 60;
+      let last = performance.now(), acc = 0, id = 0, alive = true;
+      const frame = (now) => {
+        if (!alive) return;
+        acc += Math.min(100, now - last);
+        last = now;
+        while (acc >= STEP && alive) { acc -= STEP; fn(); }
+        if (alive) id = requestAnimationFrame(frame);
+      };
+      id = requestAnimationFrame(frame);
+      return { stop() { alive = false; cancelAnimationFrame(id); } };
+    }
+
+    function stopGameTimers() {
+      if (activeLoop) { activeLoop.stop(); activeLoop = null; }
+      if (activeCountdown) { clearInterval(activeCountdown); activeCountdown = null; }
+    }
+
+    function getPos(cvs, e) {
+      const r = cvs.getBoundingClientRect();
+      const w = r.width || cvs.width, h = r.height || cvs.height;
+      return { x: (e.clientX - r.left) * cvs.width / w, y: (e.clientY - r.top) * cvs.height / h };
+    }
+
+    const setScore = (text) => { $('game-score').textContent = text; };
+    const setInstructions = (text) => { $('game-instructions').textContent = text; };
+
+    function addParticle(x, y, color) {
+      for (let i = 0; i < 8; i++) {
+        activeParticles.push({
+          x, y, color, life: 20,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6
+        });
+      }
+    }
+
+    function renderParticles(ctx) {
+      for (let i = activeParticles.length - 1; i >= 0; i--) {
+        const p = activeParticles[i];
+        p.x += p.vx; p.y += p.vy; p.life--;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, 3, 3);
+        if (p.life <= 0) activeParticles.splice(i, 1);
+      }
+    }
+
+    function clear(ctx, cvs) {
+      ctx.fillStyle = '#050b14';
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
+    }
+
+    function glow(ctx, color, blur) {
+      ctx.shadowBlur = blur;
+      ctx.shadowColor = color;
+    }
+
+    function finish(ctx, cvs, msg, score, restart) {
+      setInstructions(msg);
+      ctx.fillStyle = 'rgba(5, 11, 20, 0.85)';
+      ctx.fillRect(0, 0, cvs.width, cvs.height);
+
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ef4444';
+      ctx.font = 'bold 28px system-ui';
+      ctx.fillText('GAME OVER', cvs.width / 2, cvs.height / 2 - 30);
+
+      ctx.fillStyle = '#f8fafc';
+      ctx.font = '16px system-ui';
+      ctx.fillText(`Final Score: ${score}`, cvs.width / 2, cvs.height / 2 + 10);
+
+      const btnW = 140, btnH = 45;
+      const btnX = cvs.width / 2 - btnW / 2;
+      const btnY = cvs.height / 2 + 35;
+      ctx.fillStyle = '#6366f1';
+      ctx.fillRect(btnX, btnY, btnW, btnH);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 16px system-ui';
+      ctx.fillText('RESTART', cvs.width / 2, btnY + 28);
+
+      const onClick = (e) => {
+        const p = getPos(cvs, e);
+        if (p.x >= btnX && p.x <= btnX + btnW && p.y >= btnY && p.y <= btnY + btnH) {
+          cvs.removeEventListener('click', onClick);
+          restart();
+        }
+      };
+      cvs.addEventListener('click', onClick);
+    }
+
+    /* =========================================================
+       Game modal
+       ========================================================= */
+    function launchGame(game) {
+      stopGameTimers();
+      activeParticles = [];
+      gameKeyHandler = null;
+
+      // Replace the canvas so listeners from the previous game are discarded.
+      const old = $('game-canvas');
+      const cvs = old.cloneNode(false);
+      old.replaceWith(cvs);
+
+      $('game-title').textContent = game.title.toUpperCase();
+      setScore('Score: 0');
+      setInstructions('');
+      $('game-modal').classList.add('active');
+      document.body.classList.add('modal-open');
+
+      // Wait a frame so the canvas has its final layout size.
+      requestAnimationFrame(() => {
+        cvs.width = Math.max(240, cvs.clientWidth);
+        cvs.height = Math.max(240, cvs.clientHeight);
+        game.init(cvs, cvs.getContext('2d'));
+      });
+    }
+
+    function closeGame() {
+      stopGameTimers();
+      gameKeyHandler = null;
+      activeParticles = [];
+      $('game-modal').classList.remove('active');
+      document.body.classList.remove('modal-open');
+    }
+
+    /* =========================================================
+       Games
+       ========================================================= */
+    function initShooterGame(cvs, ctx) {
+      const INFO = 'Tap to aim & shoot! 3 misses = Game Over.';
+      let score, shipX, bullets, enemies, misses, over;
+
+      cvs.addEventListener('click', (e) => {
+        if (over) return;
+        shipX = getPos(cvs, e).x;
+        bullets.push({ x: shipX, y: cvs.height - 40 });
+        playTone(800, 30);
+      });
+
+      const start = () => {
+        score = 0; shipX = cvs.width / 2; bullets = []; enemies = []; misses = 0; over = false;
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          if (Math.random() < 0.035) enemies.push({ x: Math.random() * (cvs.width - 30), y: 0, w: 25, h: 25 });
+
+          clear(ctx, cvs);
+          glow(ctx, '#6366f1', 10);
+          ctx.fillStyle = '#6366f1';
+          ctx.fillRect(shipX - 15, cvs.height - 30, 30, 15);
+          glow(ctx, 'transparent', 0);
+
+          for (let i = bullets.length - 1; i >= 0; i--) {
+            const b = bullets[i];
+            b.y -= 7;
+            ctx.fillStyle = '#22c55e';
+            ctx.fillRect(b.x - 2, b.y, 4, 10);
+            if (b.y < 0) bullets.splice(i, 1);
+          }
+
+          for (let i = enemies.length - 1; i >= 0; i--) {
+            const en = enemies[i];
+            en.y += 2;
+            glow(ctx, '#ef4444', 10);
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(en.x, en.y, en.w, en.h);
+            glow(ctx, 'transparent', 0);
+
+            let hit = false;
+            for (let j = bullets.length - 1; j >= 0; j--) {
+              const b = bullets[j];
+              if (b.x > en.x && b.x < en.x + en.w && b.y > en.y && b.y < en.y + en.h) {
+                hit = true; bullets.splice(j, 1); break;
+              }
+            }
+            if (hit) {
+              addParticle(en.x + 12, en.y + 12, '#ef4444');
+              enemies.splice(i, 1);
+              score += 20;
+              playTone(500, 50);
+            } else if (en.y > cvs.height) {
+              enemies.splice(i, 1);
+              if (++misses >= 3) {
+                over = true;
+                finish(ctx, cvs, 'Game Over!', score, start);
+                return;
+              }
+            }
+          }
+          renderParticles(ctx);
+          setScore(`Score: ${score} | Misses: ${misses}/3`);
+        });
+      };
+      start();
+    }
+
+    function initDefenderGame(cvs, ctx) {
+      const INFO = 'Tap to rotate the shield. Block incoming meteors!';
+      let score, angle, incoming, lives, over;
+
+      cvs.addEventListener('click', () => {
+        if (over) return;
+        angle = (angle + Math.PI / 4) % (Math.PI * 2);
+        playTone(400, 40);
+      });
+
+      const start = () => {
+        score = 0; angle = 0; incoming = []; lives = 3; over = false;
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+        const spawnR = Math.hypot(cvs.width, cvs.height) / 2 + 10;
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          const cx = cvs.width / 2, cy = cvs.height / 2;
+
+          if (Math.random() < 0.03) {
+            const a = Math.random() * Math.PI * 2;
+            incoming.push({ x: cx + Math.cos(a) * spawnR, y: cy + Math.sin(a) * spawnR, speed: 1.5 });
+          }
+
+          clear(ctx, cvs);
+          glow(ctx, '#22c55e', 15);
+          ctx.fillStyle = '#22c55e';
+          ctx.beginPath(); ctx.arc(cx, cy, 15, 0, Math.PI * 2); ctx.fill();
+          glow(ctx, 'transparent', 0);
+
+          ctx.strokeStyle = '#38bdf8';
+          ctx.lineWidth = 6;
+          ctx.beginPath(); ctx.arc(cx, cy, 45, angle, angle + Math.PI / 2); ctx.stroke();
+
+          for (let i = incoming.length - 1; i >= 0; i--) {
+            const m = incoming[i];
+            const dx = cx - m.x, dy = cy - m.y;
+            const dist = Math.hypot(dx, dy) || 0.001;
+            m.x += (dx / dist) * m.speed;
+            m.y += (dy / dist) * m.speed;
+
+            ctx.fillStyle = '#f59e0b';
+            ctx.beginPath(); ctx.arc(m.x, m.y, 6, 0, Math.PI * 2); ctx.fill();
+
+            if (dist <= 48 && dist >= 30) {
+              let mAngle = Math.atan2(m.y - cy, m.x - cx);
+              if (mAngle < 0) mAngle += Math.PI * 2;
+              const end = angle + Math.PI / 2;
+              const blocked = end > Math.PI * 2
+                ? (mAngle >= angle || mAngle <= end - Math.PI * 2)
+                : (mAngle >= angle && mAngle <= end);
+              if (blocked) {
+                addParticle(m.x, m.y, '#38bdf8');
+                incoming.splice(i, 1);
+                score += 15;
+                playTone(700, 50);
+                continue;
+              }
+            }
+
+            if (dist < 15) {
+              addParticle(cx, cy, '#ef4444');
+              incoming.splice(i, 1);
+              playTone(100, 150);
+              if (--lives <= 0) {
+                over = true;
+                finish(ctx, cvs, 'Game Over!', score, start);
+                return;
+              }
+            }
+          }
+          renderParticles(ctx);
+          setScore(`Score: ${score} | Lives: ${lives}`);
+        });
+      };
+      start();
+    }
+
+    function initGridGame(cvs, ctx) {
+      const INFO = 'Tap the glowing tile before time runs out!';
+      const TILE = 40;
+      let score, target, timer, over;
+      const randomTarget = () => ({
+        x: Math.floor(Math.random() * Math.floor(cvs.width / TILE)),
+        y: Math.floor(Math.random() * Math.floor(cvs.height / TILE))
+      });
+
+      cvs.addEventListener('click', (e) => {
+        if (over) return;
+        const p = getPos(cvs, e);
+        if (Math.floor(p.x / TILE) === target.x && Math.floor(p.y / TILE) === target.y) {
+          addParticle(target.x * TILE + 20, target.y * TILE + 20, '#f59e0b');
+          score += 25;
+          target = randomTarget();
+          playTone(900, 50);
+        }
+      });
+
+      const start = () => {
+        score = 0; timer = 25; over = false;
+        target = randomTarget();
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+
+        activeCountdown = setInterval(() => {
+          if (over) return;
+          if (--timer <= 0) {
+            over = true;
+            clearInterval(activeCountdown); activeCountdown = null;
+            finish(ctx, cvs, "Time's up!", score, start);
+          }
+        }, 1000);
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          clear(ctx, cvs);
+          ctx.strokeStyle = '#1e293b';
+          ctx.lineWidth = 1;
+          for (let x = 0; x < cvs.width; x += TILE) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, cvs.height); ctx.stroke(); }
+          for (let y = 0; y < cvs.height; y += TILE) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(cvs.width, y); ctx.stroke(); }
+
+          glow(ctx, '#f59e0b', 12);
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(target.x * TILE + 5, target.y * TILE + 5, 30, 30);
+          glow(ctx, 'transparent', 0);
+
+          renderParticles(ctx);
+          setScore(`Score: ${score} | Time: ${timer}s`);
+        });
+      };
+      start();
+    }
+
+    function initRacerGame(cvs, ctx) {
+      const INFO = 'Tap left/right side to steer! 3 crashes = Game Over.';
+      let score, lane, obstacles, crashes, over;
+
+      cvs.addEventListener('click', (e) => {
+        if (over) return;
+        lane = getPos(cvs, e).x < cvs.width / 2 ? Math.max(0, lane - 1) : Math.min(2, lane + 1);
+        playTone(550, 30);
+      });
+
+      const start = () => {
+        score = 0; lane = 1; obstacles = []; crashes = 0; over = false;
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          const laneW = cvs.width / 3;
+          const laneX = (l) => laneW * l + laneW / 2 - 15;
+
+          // Never block all three lanes at once.
+          if (Math.random() < 0.03) {
+            const l = Math.floor(Math.random() * 3);
+            const blocked = new Set(obstacles.filter(o => o.y < 140).map(o => o.lane));
+            blocked.add(l);
+            if (blocked.size < 3) obstacles.push({ lane: l, y: -60 });
+          }
+
+          clear(ctx, cvs);
+          ctx.strokeStyle = '#334155';
+          ctx.lineWidth = 2;
+          [1, 2].forEach(n => { ctx.beginPath(); ctx.moveTo(laneW * n, 0); ctx.lineTo(laneW * n, cvs.height); ctx.stroke(); });
+
+          const carX = laneX(lane);
+          glow(ctx, '#3b82f6', 10);
+          ctx.fillStyle = '#3b82f6';
+          ctx.fillRect(carX, cvs.height - 80, 30, 50);
+          glow(ctx, 'transparent', 0);
+
+          for (let i = obstacles.length - 1; i >= 0; i--) {
+            const o = obstacles[i];
+            o.y += 4;
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(laneX(o.lane), o.y, 30, 50);
+
+            if (o.lane === lane && o.y > cvs.height - 130 && o.y < cvs.height - 30) {
+              addParticle(carX + 15, cvs.height - 55, '#ef4444');
+              obstacles.splice(i, 1);
+              score = Math.max(0, score - 15);
+              playTone(100, 150);
+              if (++crashes >= 3) {
+                over = true;
+                finish(ctx, cvs, 'Game Over!', score, start);
+                return;
+              }
+            } else if (o.y > cvs.height) {
+              obstacles.splice(i, 1);
+              score += 10;
+            }
+          }
+          renderParticles(ctx);
+          setScore(`Score: ${score} | Crashes: ${crashes}/3`);
+        });
+      };
+      start();
+    }
+
+    function initQuestGame(cvs, ctx) {
+      const INFO = 'Tap to jump over the red spikes!';
+      const GROUND = () => cvs.height - 60;
+      let score, py, vy, jumping, hazards, over;
+
+      cvs.addEventListener('click', () => {
+        if (over || jumping) return;
+        vy = -11; jumping = true;
+        playTone(650, 40);
+      });
+
+      const start = () => {
+        score = 0; py = GROUND(); vy = 0; jumping = false; hazards = []; over = false;
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          vy += 0.6; py += vy;
+          if (py >= GROUND()) { py = GROUND(); vy = 0; jumping = false; }
+
+          // Keep a fair gap between spikes.
+          const last = hazards[hazards.length - 1];
+          if (Math.random() < 0.02 && (!last || last.x < cvs.width - 170)) hazards.push({ x: cvs.width });
+
+          clear(ctx, cvs);
+          ctx.fillStyle = '#1e293b';
+          ctx.fillRect(0, cvs.height - 30, cvs.width, 30);
+
+          glow(ctx, '#a855f7', 10);
+          ctx.fillStyle = '#a855f7';
+          ctx.fillRect(60, py, 25, 30);
+          glow(ctx, 'transparent', 0);
+
+          for (let i = hazards.length - 1; i >= 0; i--) {
+            const h = hazards[i];
+            h.x -= 4;
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.moveTo(h.x, cvs.height - 30);
+            ctx.lineTo(h.x + 10, cvs.height - 55);
+            ctx.lineTo(h.x + 20, cvs.height - 30);
+            ctx.fill();
+
+            if (85 > h.x && 60 < h.x + 20 && py + 30 > cvs.height - 55 && py < cvs.height - 30) {
+              addParticle(72, py + 15, '#ef4444');
+              playTone(100, 200);
+              over = true;
+              finish(ctx, cvs, 'Game Over!', score, start);
+              return;
+            } else if (h.x < -20) {
+              hazards.splice(i, 1);
+              score += 15;
+            }
+          }
+          renderParticles(ctx);
+          setScore(`Score: ${score}`);
+        });
+      };
+      start();
+    }
+
+    function initBreakerGame(cvs, ctx) {
+      const INFO = 'Slide your finger/mouse (or use ← →) to move the paddle.';
+      const PADDLE_W = 80;
+      let score, bx, by, bvx, bvy, px, lives, over, bricks;
+
+      const buildBricks = () => {
+        const cols = 6, gap = 6, margin = 15;
+        const bw = (cvs.width - margin * 2 - gap * (cols - 1)) / cols;
+        bricks = [];
+        for (let r = 0; r < 3; r++) {
+          for (let c = 0; c < cols; c++) {
+            bricks.push({ x: margin + c * (bw + gap), y: r * 25 + 40, w: bw, h: 15, active: true });
+          }
+        }
+      };
+      const clampPaddle = () => { px = Math.max(0, Math.min(cvs.width - PADDLE_W, px)); };
+      const movePaddle = (e) => { px = getPos(cvs, e).x - PADDLE_W / 2; clampPaddle(); };
+
+      cvs.addEventListener('mousemove', (e) => { if (!over) movePaddle(e); });
+      const onTouch = (e) => {
+        if (over) return;
+        e.preventDefault();
+        movePaddle(e.touches[0]);
+      };
+      cvs.addEventListener('touchstart', onTouch, { passive: false });
+      cvs.addEventListener('touchmove', onTouch, { passive: false });
+      gameKeyHandler = (e) => {
+        if (over) return;
+        if (e.key === 'ArrowLeft') { px -= 25; clampPaddle(); e.preventDefault(); }
+        else if (e.key === 'ArrowRight') { px += 25; clampPaddle(); e.preventDefault(); }
+      };
+
+      const resetBall = () => { bx = cvs.width / 2; by = cvs.height / 2; bvx = 3; bvy = -3; };
+
+      const start = () => {
+        score = 0; lives = 3; over = false;
+        resetBall();
+        px = cvs.width / 2 - PADDLE_W / 2;
+        buildBricks();
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          const SUB = 2;
+          for (let s = 0; s < SUB; s++) {
+            bx += bvx / SUB;
+            by += bvy / SUB;
+            if (bx < 6) { bx = 6; bvx = Math.abs(bvx); }
+            if (bx > cvs.width - 6) { bx = cvs.width - 6; bvx = -Math.abs(bvx); }
+            if (by < 6) { by = 6; bvy = Math.abs(bvy); }
+
+            if (bvy > 0 && by + 6 >= cvs.height - 30 && by < cvs.height - 15 && bx > px - 4 && bx < px + PADDLE_W + 4) {
+              bvy = -Math.abs(bvy);
+              bvx = ((bx - (px + PADDLE_W / 2)) / (PADDLE_W / 2)) * 4;
+              playTone(500, 30);
+            }
+
+            let flipped = false;
+            bricks.forEach(b => {
+              if (b.active && bx + 4 > b.x && bx - 4 < b.x + b.w && by + 4 > b.y && by - 4 < b.y + b.h) {
+                b.active = false;
+                score += 20;
+                if (!flipped) { bvy *= -1; flipped = true; }
+                addParticle(b.x + b.w / 2, b.y + 7, '#14b8a6');
+                playTone(700, 40);
+              }
+            });
+          }
+
+          if (by > cvs.height) {
+            lives--;
+            resetBall();
+            playTone(150, 200);
+            if (lives <= 0) {
+              over = true;
+              finish(ctx, cvs, 'Game Over!', score, start);
+              return;
+            }
+          }
+
+          if (bricks.every(b => !b.active)) {
+            score += 100;
+            buildBricks();
+            const sx = bvx >= 0 ? 1 : -1;
+            bx = cvs.width / 2; by = cvs.height / 2;
+            bvy = -Math.min(7, Math.abs(bvy) * 1.1);
+            bvx = sx * Math.min(7, Math.max(2, Math.abs(bvx) * 1.1));
+          }
+
+          clear(ctx, cvs);
+          ctx.fillStyle = '#14b8a6';
+          bricks.forEach(b => { if (b.active) ctx.fillRect(b.x, b.y, b.w, b.h); });
+          ctx.fillStyle = '#fff';
+          ctx.beginPath(); ctx.arc(bx, by, 6, 0, Math.PI * 2); ctx.fill();
+          ctx.fillStyle = '#f8fafc';
+          ctx.fillRect(px, cvs.height - 30, PADDLE_W, 10);
+
+          renderParticles(ctx);
+          setScore(`Score: ${score} | Lives: ${lives}`);
+        });
+      };
+      start();
+    }
+
+    function initCollapseGame(cvs, ctx) {
+      const INFO = 'Tap the glowing blocks before time expires!';
+      const SIZE = 60;
+      let score, blocks, timer, over;
+
+      const layout = () => {
+        const cols = Math.max(1, Math.min(4, Math.floor((cvs.width - 10) / (SIZE + 15))));
+        const gapX = cols > 1 ? Math.min(80, (cvs.width - SIZE - 20) / (cols - 1)) : 0;
+        const startX = Math.max(5, (cvs.width - (SIZE + gapX * (cols - 1))) / 2);
+        blocks = [];
+        for (let i = 0; i < 8; i++) {
+          blocks.push({
+            x: startX + (i % cols) * gapX,
+            y: Math.min(50 + Math.floor(i / cols) * 80, cvs.height - SIZE - 10),
+            active: true
+          });
+        }
+      };
+
+      cvs.addEventListener('click', (e) => {
+        if (over) return;
+        const p = getPos(cvs, e);
+        for (const b of blocks) {
+          if (b.active && p.x > b.x && p.x < b.x + SIZE && p.y > b.y && p.y < b.y + SIZE) {
+            b.active = false;
+            score += 20;
+            playTone(750, 40);
+            addParticle(b.x + SIZE / 2, b.y + SIZE / 2, '#f43f5e');
+            const roundBlocks = blocks;
+            setTimeout(() => {
+              // Ignore if the game ended or was restarted in the meantime.
+              if (over || roundBlocks !== blocks) return;
+              b.x = Math.random() * (cvs.width - SIZE - 10) + 5;
+              b.y = Math.random() * (cvs.height - SIZE - 10) + 5;
+              b.active = true;
+            }, 700);
+            break;
+          }
+        }
+      });
+
+      const start = () => {
+        score = 0; timer = 20; over = false;
+        layout();
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+
+        activeCountdown = setInterval(() => {
+          if (over) return;
+          if (--timer <= 0) {
+            over = true;
+            clearInterval(activeCountdown); activeCountdown = null;
+            finish(ctx, cvs, 'Time Expired!', score, start);
+          }
+        }, 1000);
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          clear(ctx, cvs);
+          blocks.forEach(b => {
+            if (!b.active) return;
+            glow(ctx, '#f43f5e', 10);
+            ctx.fillStyle = '#f43f5e';
+            ctx.fillRect(b.x, b.y, SIZE, SIZE);
+            glow(ctx, 'transparent', 0);
+          });
+          renderParticles(ctx);
+          setScore(`Score: ${score} | Time: ${timer}s`);
+        });
+      };
+      start();
+    }
+
+    function initShiftGame(cvs, ctx) {
+      const INFO = 'Tap to flip gravity! Avoid the spikes.';
+      let score, onFloor, py, obstacles, crashes, over;
+
+      cvs.addEventListener('click', () => {
+        if (over) return;
+        onFloor = !onFloor;
+        playTone(500, 40);
+      });
+
+      const start = () => {
+        score = 0; onFloor = true; py = cvs.height - 50; obstacles = []; crashes = 0; over = false;
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          py += ((onFloor ? cvs.height - 50 : 20) - py) * 0.3;
+
+          // Keep a fair gap between obstacles.
+          const last = obstacles[obstacles.length - 1];
+          if (Math.random() < 0.03 && (!last || last.x < cvs.width - 130)) {
+            obstacles.push({ x: cvs.width, top: Math.random() > 0.5 });
+          }
+
+          clear(ctx, cvs);
+          glow(ctx, '#84cc16', 10);
+          ctx.fillStyle = '#84cc16';
+          ctx.fillRect(60, py, 30, 30);
+          glow(ctx, 'transparent', 0);
+
+          for (let i = obstacles.length - 1; i >= 0; i--) {
+            const o = obstacles[i];
+            o.x -= 4;
+            ctx.fillStyle = '#ef4444';
+            ctx.fillRect(o.x, o.top ? 20 : cvs.height - 50, 25, 30);
+
+            const overlapsX = o.x + 25 > 60 && o.x < 90;
+            const hit = (o.top && !onFloor && py < 50) || (!o.top && onFloor && py > cvs.height - 70);
+            if (overlapsX && hit) {
+              addParticle(75, py + 15, '#ef4444');
+              obstacles.splice(i, 1);
+              score = Math.max(0, score - 10);
+              playTone(100, 100);
+              if (++crashes >= 3) {
+                over = true;
+                finish(ctx, cvs, 'Game Over!', score, start);
+                return;
+              }
+            } else if (o.x < -30) {
+              obstacles.splice(i, 1);
+              score += 10;
+            }
+          }
+          renderParticles(ctx);
+          setScore(`Score: ${score} | Crashes: ${crashes}/3`);
+        });
+      };
+      start();
+    }
+
+    function initTankGame(cvs, ctx) {
+      const INFO = 'Tap where you want to aim! Hit the target before ammo runs out.';
+      const FLIGHT = 50; // frames a shell takes to reach the tapped point
+      let score, shells, targetX, shots, over;
+      const newTarget = () => Math.random() * Math.max(10, cvs.width - 140) + 90;
+
+      cvs.addEventListener('click', (e) => {
+        if (over || shots <= 0) return;
+        const p = getPos(cvs, e);
+        const x0 = 40, y0 = cvs.height - 40;
+        shells.push({
+          x: x0, y: y0,
+          vx: (p.x - x0) / FLIGHT,
+          vy: (p.y - y0 - 0.1 * FLIGHT * (FLIGHT - 1)) / FLIGHT
+        });
+        shots--;
+        playTone(600, 50);
+      });
+
+      const start = () => {
+        score = 0; shells = []; targetX = newTarget(); shots = 5; over = false;
+        activeParticles = [];
+        stopGameTimers();
+        setInstructions(INFO);
+
+        activeLoop = startLoop(() => {
+          if (over) return;
+          clear(ctx, cvs);
+
+          glow(ctx, '#eab308', 10);
+          ctx.fillStyle = '#eab308';
+          ctx.fillRect(targetX, cvs.height - 40, 40, 15);
+          glow(ctx, 'transparent', 0);
+
+          ctx.fillStyle = '#64748b';
+          ctx.fillRect(20, cvs.height - 30, 40, 20);
+
+          for (let i = shells.length - 1; i >= 0; i--) {
+            const s = shells[i];
+            s.x += s.vx; s.y += s.vy; s.vy += 0.2;
+            ctx.fillStyle = '#fff';
+            ctx.beginPath(); ctx.arc(s.x, s.y, 4, 0, Math.PI * 2); ctx.fill();
+
+            if (s.x > targetX - 4 && s.x < targetX + 44 && s.y > cvs.height - 46 && s.y < cvs.height - 20) {
+              addParticle(targetX + 20, cvs.height - 35, '#eab308');
+              score += 50;
+              playTone(900, 80);
+              targetX = newTarget();
+              shells.splice(i, 1);
+              shots = Math.min(5, shots + 1);
+            } else if (s.y > cvs.height || s.x > cvs.width + 20 || s.x < -20) {
+              shells.splice(i, 1);
+            }
+          }
+
+          renderParticles(ctx);
+          setScore(`Score: ${score} | Shots: ${shots}`);
+
+          if (shots === 0 && shells.length === 0) {
+            over = true;
+            finish(ctx, cvs, 'Out of ammo!', score, start);
+          }
+        });
+      };
+      start();
+    }
+
+    /* =========================================================
+       Chat assistant
+       ========================================================= */
+    function botReply(text) {
+      const t = text.toLowerCase();
+      if (/(game|play|pulsar)/.test(t))
+        return 'Open the Games page and press "Play Now" on any game. Press Esc or the Close button to leave a game.';
+      if (/(mobile|phone|touch|tap)/.test(t))
+        return 'All games work with taps on mobile and clicks on desktop. Brick Breaker also supports dragging and the arrow keys.';
+      if (/(sound|music|mute|audio)/.test(t))
+        return 'Use the speaker button at the top right to mute or unmute game sounds.';
+      if (/(dark|light|theme)/.test(t))
+        return 'Use the 🌓 button at the top right to switch between dark and light themes.';
+      if (/(hi|hello|hey)\b/.test(t))
+        return 'Hey! Ask me about the games, sound or themes.';
+      return 'I can help with the games, sound and theme settings. What would you like to know?';
+    }
+
+    function appendChat(text, who) {
+      const box = $('chat-messages');
+      const div = document.createElement('div');
+      div.className = 'msg ' + who;
+      div.textContent = text;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function sendChat() {
+      const input = $('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
+      appendChat(text, 'user');
+      input.value = '';
+      setTimeout(() => appendChat(botReply(text), 'bot'), 400);
+    }
+
+    function toggleChat() {
+      const win = $('chat-window');
+      win.style.display = win.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    /* =========================================================
+       Init
+       ========================================================= */
+    function init() {
+      applyTheme();
+      applySoundIcon();
+      renderCatalog();
+
+      $('theme-btn').addEventListener('click', () => {
+        settings.dark = !settings.dark;
+        store.set('dark_mode', settings.dark);
+        applyTheme();
+      });
+      $('sound-btn').addEventListener('click', () => {
+        settings.muted = !settings.muted;
+        store.set('sound_muted', settings.muted);
+        applySoundIcon();
+        if (!settings.muted) playTone(440, 100);
+      });
+
+      $('game-search').addEventListener('input', filterGames);
+      $('close-game-btn').addEventListener('click', closeGame);
+      $('privacy-link').addEventListener('click', (e) => { e.preventDefault(); showView('privacy'); });
+
+      $('chat-toggle').addEventListener('click', toggleChat);
+      $('chat-close').addEventListener('click', toggleChat);
+      $('chat-send').addEventListener('click', sendChat);
+      $('chat-input').addEventListener('keydown', (e) => { if (e.key === 'Enter') sendChat(); });
+
+      document.addEventListener('keydown', (e) => {
+        if (!$('game-modal').classList.contains('active')) return;
+        if (e.key === 'Escape') closeGame();
+        else if (gameKeyHandler) gameKeyHandler(e);
+      });
+
+      window.addEventListener('hashchange', () => {
+        if (location.hash === '#privacy') showView('privacy');
+      });
+      if (location.hash === '#privacy') showView('privacy');
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
